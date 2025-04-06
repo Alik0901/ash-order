@@ -1,26 +1,25 @@
 import { useEffect } from 'react';
 import WebApp from '@twa-dev/sdk';
-import { Routes, Route } from 'react-router-dom';
-import Welcome from './screens/Welcome';
-import Init from './screens/Init';
-import Path from './screens/Path';
 
-function App() {
+export default function App() {
   useEffect(() => {
     WebApp.ready();
-    WebApp.expand(); // Растягивает WebApp на весь экран Telegram
-
-    console.log("✅ Telegram WebApp инициализирован");
-    console.log("InitData:", WebApp.initData);
+    WebApp.expand();
+    console.log('✅ WebApp инициализирован');
   }, []);
 
   return (
-    <Routes>
-      <Route path="/" element={<Welcome />} />
-      <Route path="/init" element={<Init />} />
-      <Route path="/path" element={<Path />} />
-    </Routes>
+    <div style={{
+      height: '100vh',
+      backgroundColor: '#111',
+      color: '#0f0',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      fontSize: '24px',
+      fontWeight: 'bold',
+    }}>
+      Привет, Telegram 👁‍🗨
+    </div>
   );
 }
-
-export default App;
