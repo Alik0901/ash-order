@@ -4,35 +4,32 @@ export default function Welcome() {
   const navigate = useNavigate();
 
   return (
-    <div style={styles.container}>
+    <div style={{
+      height: '100vh',
+      background: '#0c0c0c',
+      color: '#d4af37',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+      fontFamily: 'serif',
+      textAlign: 'center'
+    }}>
       <h1>ОРДЕН ПЕПЛА</h1>
       <p>Тот, кто ищет свет — должен сгореть.</p>
-      <button style={styles.button} onClick={() => navigate('/init')}>
+      <button
+        style={{
+          marginTop: 20,
+          padding: '10px 20px',
+          border: '1px solid #d4af37',
+          background: 'transparent',
+          color: '#d4af37',
+          cursor: 'pointer'
+        }}
+        onClick={() => navigate('/init')}
+      >
         ВОЙТИ
       </button>
     </div>
   );
 }
-
-const styles = {
-  container: {
-    height: '100vh',
-    background: '#0c0c0c',
-    color: '#d4af37',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-    fontFamily: 'serif',
-    textAlign: 'center',
-  },
-  button: {
-    padding: '12px 24px',
-    fontSize: 16,
-    backgroundColor: 'transparent',
-    border: '1px solid #d4af37',
-    color: '#d4af37',
-    cursor: 'pointer',
-    marginTop: 20,
-  },
-};
