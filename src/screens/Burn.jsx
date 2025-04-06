@@ -41,7 +41,7 @@ const styles = {
   container: {
     position: 'relative',
     height: '100vh',
-    backgroundImage: 'url("/bg-burn.png")',
+    backgroundImage: 'url("/bg-burn.webp")',
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     overflow: 'hidden',

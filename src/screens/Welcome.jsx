@@ -21,7 +21,7 @@ const styles = {
   container: {
     position: 'relative',
     height: '100vh',
-    backgroundImage: 'url("/bg-welcome.png")',
+    backgroundImage: 'url("/bg-welcome.webp")',
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     overflow: 'hidden',

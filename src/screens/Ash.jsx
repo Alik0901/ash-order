@@ -24,7 +24,7 @@ const styles = {
   container: {
     position: 'relative',
     height: '100vh',
-    backgroundImage: 'url("/bg-ash.png")',
+    backgroundImage: 'url("/bg-ash.webp")',
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     overflow: 'hidden',
