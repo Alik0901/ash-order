@@ -1,7 +1,14 @@
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import WebApp from "@twa-dev/sdk";
 
 export default function Welcome() {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    WebApp.ready();
+    WebApp.expand(); // Telegram: разрешить и развернуть WebApp
+  }, []);
 
   return (
     <div style={styles.container}>
