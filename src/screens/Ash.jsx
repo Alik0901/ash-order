@@ -1,9 +1,7 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
-export default function Path() {
+export default function Ash() {
   const [name, setName] = useState('');
-  const navigate = useNavigate();
 
   useEffect(() => {
     const saved = localStorage.getItem('ash_order_name');
@@ -14,11 +12,9 @@ export default function Path() {
     <div style={styles.container}>
       <div style={styles.overlay} />
       <div style={styles.content}>
-        <h2 style={styles.title}>The Path Begins</h2>
-        <p style={styles.subtitle}>{name}, you have taken the first step.</p>
-        <button style={styles.button} onClick={() => navigate('/burn')}>
-          Burn Yourself
-        </button>
+        <h2 style={styles.title}>You are ash now.</h2>
+        <p style={styles.subtitle}>{name}, you have burned.</p>
+        <p style={styles.line}>The ashes remember.</p>
       </div>
     </div>
   );
@@ -28,7 +24,7 @@ const styles = {
   container: {
     position: 'relative',
     height: '100vh',
-    backgroundImage: 'url("/bg-path.png")',
+    backgroundImage: 'url("/bg-ash.png")',
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     overflow: 'hidden',
@@ -36,7 +32,7 @@ const styles = {
   overlay: {
     position: 'absolute',
     inset: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
     zIndex: 1,
   },
   content: {
@@ -59,14 +55,10 @@ const styles = {
   subtitle: {
     fontSize: '16px',
     opacity: 0.85,
-    marginBottom: 30,
+    marginBottom: 10,
   },
-  button: {
-    padding: '10px 24px',
-    background: 'transparent',
-    color: '#d4af37',
-    border: '1px solid #d4af37',
-    cursor: 'pointer',
-    fontSize: '16px',
+  line: {
+    fontSize: '14px',
+    opacity: 0.6,
   },
 };

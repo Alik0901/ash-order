@@ -8,50 +8,81 @@ export default function Burn() {
 
   useEffect(() => {
     const saved = localStorage.getItem('ash_order_name');
-    setName(saved || 'Безымянный');
+    setName(saved || 'Nameless');
   }, []);
 
   const handleBurn = () => {
     setBurning(true);
     setTimeout(() => {
-      navigate('/ash'); // потом создадим экран "Прах"
-    }, 3000); // 3 секунды "сожжения"
+      navigate('/ash');
+    }, 3000);
   };
 
   return (
-    <div style={{
-      height: '100vh',
-      background: '#0c0c0c',
-      color: '#d4af37',
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'center',
-      alignItems: 'center',
-      fontFamily: 'serif',
-      textAlign: 'center'
-    }}>
-      <h2>Сожжение</h2>
-      <p>{name}, ты готов сгореть ради истины?</p>
+    <div style={styles.container}>
+      <div style={styles.overlay} />
+      <div style={styles.content}>
+        <h2 style={styles.title}>The Sacrifice</h2>
+        <p style={styles.subtitle}>{name}, are you ready to burn?</p>
 
-      {!burning ? (
-        <button
-          onClick={handleBurn}
-          style={{
-            marginTop: 20,
-            padding: '12px 24px',
-            background: 'transparent',
-            color: '#d4af37',
-            border: '1px solid #d4af37',
-            cursor: 'pointer'
-          }}
-        >
-          Принести себя в жертву
-        </button>
-      ) : (
-        <div style={{ marginTop: 20, fontSize: 18, color: 'orangered' }}>
-          🔥 Пламя поглощает тебя...
-        </div>
-      )}
+        {!burning ? (
+          <button style={styles.button} onClick={handleBurn}>
+            Offer Yourself
+          </button>
+        ) : (
+          <p style={styles.burning}>🔥 The fire consumes you...</p>
+        )}
+      </div>
     </div>
   );
 }
+
+const styles = {
+  container: {
+    position: 'relative',
+    height: '100vh',
+    backgroundImage: 'url("/bg-burn.png")',
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    overflow: 'hidden',
+  },
+  overlay: {
+    position: 'absolute',
+    inset: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    zIndex: 1,
+  },
+  content: {
+    position: 'relative',
+    zIndex: 2,
+    color: '#d4af37',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    fontFamily: 'serif',
+    textAlign: 'center',
+    height: '100%',
+    padding: '0 20px',
+  },
+  title: {
+    fontSize: '26px',
+    marginBottom: 10,
+  },
+  subtitle: {
+    fontSize: '16px',
+    marginBottom: 30,
+  },
+  button: {
+    padding: '10px 24px',
+    background: 'transparent',
+    color: '#d4af37',
+    border: '1px solid #d4af37',
+    cursor: 'pointer',
+    fontSize: '16px',
+  },
+  burning: {
+    fontSize: '18px',
+    color: 'orangered',
+  },
+};

@@ -5,6 +5,7 @@ import Welcome from './screens/Welcome';
 import Init from './screens/Init';
 import Path from './screens/Path';
 import Burn from './screens/Burn';
+import Ash from './screens/Ash';
 
 export default function App() {
   useEffect(() => {
@@ -18,6 +19,7 @@ export default function App() {
       <Route path="/init" element={<Init />} />
       <Route path="/path" element={<Path />} />
       <Route path="/burn" element={<Burn />} />
+      <Route path="/ash" element={<Ash />} />
     </Routes>
   );
 }

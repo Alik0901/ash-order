@@ -21,7 +21,7 @@ const styles = {
   container: {
     position: 'relative',
     height: '100vh',
-    backgroundImage: 'url("/welcome-bg.png")',
+    backgroundImage: 'url("/bg-welcome.png")',
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     overflow: 'hidden',
@@ -29,7 +29,7 @@ const styles = {
   overlay: {
     position: 'absolute',
     inset: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.65)',
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
     zIndex: 1,
   },
   content: {
