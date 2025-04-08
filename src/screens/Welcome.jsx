@@ -9,6 +9,12 @@ export default function Welcome() {
     navigate('/init');
   };
 
+  const handleOpenScroll = () => {
+    setShowScroll(true);
+    const audio = new Audio('/sounds/parchment-scroll.mp3');
+    audio.play();
+  };
+
   return (
     <div style={styles.container}>
       <div style={styles.overlay} />
@@ -20,7 +26,7 @@ export default function Welcome() {
           ENTER
         </button>
 
-        <button style={styles.reveal} onClick={() => setShowScroll(true)}>
+        <button style={styles.reveal} onClick={handleOpenScroll}>
           Read the Scroll
         </button>
       </div>
@@ -130,7 +136,8 @@ const styles = {
     textAlign: 'left',
     boxShadow: '0 0 15px rgba(212, 175, 55, 0.3)',
     borderRadius: '8px',
-    transform: 'scale(0.95)',
+    opacity: 0,                    // важно для анимации
+    transform: 'scale(0.95)',      // начальное состояние
     animation: 'popIn 0.4s ease-out forwards',
   },
   scrollTitle: {
@@ -155,4 +162,3 @@ const styles = {
     marginRight: 'auto',
   },
 };
-
