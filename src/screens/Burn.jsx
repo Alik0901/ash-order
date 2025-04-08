@@ -14,7 +14,7 @@ export default function Burn() {
   const handleBurn = () => {
     setBurning(true);
     setTimeout(() => {
-      navigate('/ash');
+      navigate('/profile');
     }, 3000);
   };
 
