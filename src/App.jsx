@@ -6,6 +6,7 @@ import Init from './screens/Init';
 import Path from './screens/Path';
 import Burn from './screens/Burn';
 import Ash from './screens/Ash';
+import Profile from './screens/Profile';
 
 export default function App() {
   useEffect(() => {
@@ -20,6 +21,8 @@ export default function App() {
       <Route path="/path" element={<Path />} />
       <Route path="/burn" element={<Burn />} />
       <Route path="/ash" element={<Ash />} />
+      <Route path="/profile" element={<Profile />} />
+
     </Routes>
   );
 }
