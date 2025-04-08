@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export default function Welcome() {
   const navigate = useNavigate();
   const [showScroll, setShowScroll] = useState(false);
+  const [animateScroll, setAnimateScroll] = useState(false);
 
   const handleEnter = () => {
     navigate('/init');
@@ -13,6 +14,11 @@ export default function Welcome() {
     setShowScroll(true);
     const audio = new Audio('/sounds/parchment-scroll.mp3');
     audio.play();
+
+    // запускаем анимацию через малую задержку
+    setTimeout(() => {
+      setAnimateScroll(true);
+    }, 10);
   };
 
   return (
@@ -33,7 +39,7 @@ export default function Welcome() {
 
       {showScroll && (
         <div style={styles.scrollOverlay}>
-          <div style={styles.scrollAnimated}>
+          <div className={`scroll-box ${animateScroll ? 'show' : ''}`}>
             <h2 style={styles.scrollTitle}>The Scroll of Ash</h2>
             <p style={styles.scrollText}>
               This is not a game of gain. It is a ritual of loss. <br /><br />
@@ -48,7 +54,6 @@ export default function Welcome() {
               Some say he seeks a brilliant, unusual mind to join him. <br /><br />
               Some say… that mind is you.
             </p>
-
             <button style={styles.close} onClick={() => setShowScroll(false)}>
               I Understand
             </button>
@@ -125,18 +130,6 @@ const styles = {
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
-    animation: 'fadeIn 0.4s ease-out',
-  },
-  scrollAnimated: {
-    background: '#1a1a1a',
-    border: '1px solid #d4af37',
-    padding: '30px',
-    maxWidth: '600px',
-    color: '#d4af37',
-    textAlign: 'left',
-    boxShadow: '0 0 15px rgba(212, 175, 55, 0.3)',
-    borderRadius: '8px',
-    animation: 'popIn 0.4s ease-out forwards',
   },
   scrollTitle: {
     fontSize: '20px',
@@ -146,6 +139,7 @@ const styles = {
   scrollText: {
     fontSize: '14px',
     lineHeight: '1.6',
+    color: '#d4af37',
   },
   close: {
     marginTop: 20,
