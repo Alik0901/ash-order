@@ -27,7 +27,7 @@ export default function Welcome() {
 
       {showScroll && (
         <div style={styles.scrollOverlay}>
-          <div style={styles.scroll}>
+          <div style={styles.scrollAnimated}>
             <h2 style={styles.scrollTitle}>The Scroll of Ash</h2>
             <p style={styles.scrollText}>
               This is not a game of gain. It is a ritual of loss. <br /><br />
@@ -98,6 +98,8 @@ const styles = {
     border: '1px solid #d4af37',
     cursor: 'pointer',
     fontSize: '16px',
+    transition: 'box-shadow 0.3s ease',
+    boxShadow: '0 0 6px rgba(212, 175, 55, 0.3)',
   },
   reveal: {
     marginTop: 16,
@@ -117,8 +119,9 @@ const styles = {
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
+    animation: 'fadeIn 0.4s ease-out',
   },
-  scroll: {
+  scrollAnimated: {
     background: '#1a1a1a',
     border: '1px solid #d4af37',
     padding: '30px',
@@ -127,6 +130,8 @@ const styles = {
     textAlign: 'left',
     boxShadow: '0 0 15px rgba(212, 175, 55, 0.3)',
     borderRadius: '8px',
+    transform: 'scale(0.95)',
+    animation: 'popIn 0.4s ease-out forwards',
   },
   scrollTitle: {
     fontSize: '20px',
@@ -150,3 +155,4 @@ const styles = {
     marginRight: 'auto',
   },
 };
+
