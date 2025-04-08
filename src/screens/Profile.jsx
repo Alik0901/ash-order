@@ -10,7 +10,7 @@ export default function Profile() {
     const savedName = localStorage.getItem('ash_order_name');
     setName(savedName || 'Nameless Wanderer');
 
-    // Пока заглушки:
+    // Заглушки
     setFragments([
       'Ash of Memory',
       'Whisper of Fire',
@@ -21,53 +21,60 @@ export default function Profile() {
       setCursedUntil(new Date(curseTime));
     }
 
-    // В будущем заменим на вызов canEnterShadow()
     setCanEnterShadow(false);
   }, []);
 
   return (
     <div style={styles.container}>
-      <h1 style={styles.title}>Your Journey</h1>
+      <div style={styles.overlay} />
+      <img src="/ledger_bg.webp" alt="Ash Ledger" style={styles.background} />
 
-      <div style={styles.section}>
-        <p><strong>Name:</strong> {name}</p>
-        <p><strong>Wallet:</strong> Not connected</p>
-      </div>
+      <div style={styles.content}>
+        <h1 style={styles.title}>Ash Ledger</h1>
+        <p style={styles.subtitle}>"What you’ve lost shall guide you."</p>
 
-      <div style={styles.section}>
-        <h2 style={styles.subtitle}>Fragments Collected</h2>
-        {fragments.length === 0 ? (
-          <p style={styles.empty}>You have found nothing yet.</p>
-        ) : (
-          <ul style={styles.list}>
-            {fragments.map((f, i) => (
-              <li key={i}>{f}</li>
-            ))}
-          </ul>
-        )}
-      </div>
+        <div style={styles.section}>
+          <p><strong>Name:</strong> {name}</p>
+        </div>
 
-      <div style={styles.section}>
-        <h2 style={styles.subtitle}>Curse</h2>
-        {cursedUntil ? (
-          <p>You are cursed until {cursedUntil.toLocaleString()}</p>
-        ) : (
-          <p>You are free.</p>
-        )}
-      </div>
+        <div style={styles.section}>
+          <h2 style={styles.heading}>Fragments</h2>
+          {fragments.length === 0 ? (
+            <p style={styles.empty}>No fragments have found you yet.</p>
+          ) : (
+            <ul style={styles.list}>
+              {fragments.map((f, i) => (
+                <li key={i} style={styles.fragment}>✦ {f}</li>
+              ))}
+            </ul>
+          )}
+        </div>
 
-      <div style={styles.section}>
-        <h2 style={styles.subtitle}>Shadow Labyrinth</h2>
-        {canEnterShadow ? (
-          <p>You may enter the shadow…</p>
-        ) : (
-          <p>The gate remains closed.</p>
-        )}
-      </div>
+        <div style={styles.section}>
+          <h2 style={styles.heading}>Curse</h2>
+          {cursedUntil ? (
+            <p className="cursed">☠️ You are cursed until {cursedUntil.toLocaleString()}</p>
+          ) : (
+            <p>You are free… for now.</p>
+          )}
+        </div>
 
-      <div style={styles.section}>
-        <h2 style={styles.subtitle}>Global Progress</h2>
-        <p className="progress">The fire grows... (unknown percent)</p>
+        <div style={styles.section}>
+          <h2 style={styles.heading}>Shadow Gate</h2>
+          {canEnterShadow ? (
+            <p className="gate">A whisper calls…</p>
+          ) : (
+            <p>The gate remains sealed by unseen forces.</p>
+          )}
+        </div>
+
+        <div style={styles.section}>
+          <h2 style={styles.heading}>World Progress</h2>
+          <div style={styles.progressBar}>
+            <div style={{ ...styles.progressFill, width: '5%' }} /> {/* Заглушка */}
+          </div>
+          <p style={styles.progressLabel}>The fire grows…</p>
+        </div>
       </div>
     </div>
   );
@@ -75,30 +82,82 @@ export default function Profile() {
 
 const styles = {
   container: {
+    position: 'relative',
+    height: '100vh',
+    overflow: 'hidden',
+    fontFamily: 'serif',
+    color: '#d4af37',
+  },
+  overlay: {
+    position: 'absolute',
+    inset: 0,
+    backgroundColor: 'rgba(0,0,0,0.65)',
+    zIndex: 1,
+  },
+  background: {
+    position: 'absolute',
+    inset: 0,
+    width: '100%',
+    height: '100%',
+    objectFit: 'cover',
+    opacity: 0.35,
+    zIndex: 0,
+  },
+  content: {
+    position: 'relative',
+    zIndex: 2,
     padding: '40px 20px',
     maxWidth: '600px',
     margin: '0 auto',
-    color: '#d4af37',
-    fontFamily: 'serif',
+    textAlign: 'center',
   },
   title: {
-    fontSize: '28px',
-    textAlign: 'center',
-    marginBottom: '30px',
-  },
-  section: {
-    marginBottom: '30px',
+    fontSize: '36px',
+    letterSpacing: '2px',
+    marginBottom: '10px',
   },
   subtitle: {
+    fontStyle: 'italic',
+    marginBottom: '30px',
+    opacity: 0.7,
+  },
+  section: {
+    marginBottom: '25px',
+  },
+  heading: {
     fontSize: '20px',
     marginBottom: '10px',
+    borderBottom: '1px solid #d4af37',
+    paddingBottom: '4px',
+  },
+  list: {
+    listStyle: 'none',
+    padding: 0,
+  },
+  fragment: {
+    padding: '5px 0',
+    fontSize: '16px',
+    letterSpacing: '1px',
   },
   empty: {
     fontStyle: 'italic',
     opacity: 0.6,
   },
-  list: {
-    listStyle: 'disc',
-    paddingLeft: '20px',
+  progressBar: {
+    width: '100%',
+    height: '10px',
+    background: '#555',
+    borderRadius: '5px',
+    overflow: 'hidden',
+    margin: '10px 0',
+  },
+  progressFill: {
+    height: '100%',
+    background: '#d4af37',
+    transition: 'width 1s ease',
+  },
+  progressLabel: {
+    fontSize: '14px',
+    opacity: 0.6,
   },
 };
