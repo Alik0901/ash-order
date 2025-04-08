@@ -136,8 +136,6 @@ const styles = {
     textAlign: 'left',
     boxShadow: '0 0 15px rgba(212, 175, 55, 0.3)',
     borderRadius: '8px',
-    opacity: 0,                    // важно для анимации
-    transform: 'scale(0.95)',      // начальное состояние
     animation: 'popIn 0.4s ease-out forwards',
   },
   scrollTitle: {
