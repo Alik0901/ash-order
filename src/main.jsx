@@ -5,30 +5,29 @@ import App from './App.jsx';
 import './index.css';
 import './App.css';
 
-import {
-  WagmiProvider,
-  createConfig,
-  configureChains,
-} from 'wagmi';
+import { WagmiProvider } from 'wagmi';
+import { http, createConfig } from 'wagmi';
 import { scrollSepolia } from 'wagmi/chains';
-import { publicProvider } from 'wagmi/providers/public';
-
-const { chains, publicClient } = configureChains(
-  [scrollSepolia],
-  [publicProvider()],
-);
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const config = createConfig({
-  autoConnect: true,
-  publicClient,
+  chains: [scrollSepolia],
+  transports: {
+    [scrollSepolia.id]: http(),
+  },
+  ssr: false,
 });
+
+const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <WagmiProvider config={config}>
-      <MemoryRouter>
-        <App />
-      </MemoryRouter>
+      <QueryClientProvider client={queryClient}>
+        <MemoryRouter>
+          <App />
+        </MemoryRouter>
+      </QueryClientProvider>
     </WagmiProvider>
   </React.StrictMode>
 );
