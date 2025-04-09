@@ -40,6 +40,7 @@ const styles = {
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     overflow: 'hidden',
+    width: '100%',
   },
   overlay: {
     position: 'absolute',
@@ -58,7 +59,10 @@ const styles = {
     fontFamily: 'serif',
     textAlign: 'center',
     height: '100%',
+    width: '100%',
+    maxWidth: '100%',
     padding: '0 20px',
+    boxSizing: 'border-box',
   },
   title: {
     fontSize: '24px',
@@ -66,12 +70,14 @@ const styles = {
   },
   input: {
     padding: '10px',
-    width: '70%',
+    width: '100%',
+    maxWidth: '400px',
     fontSize: '16px',
     backgroundColor: 'black',
     color: '#d4af37',
     border: '1px solid #d4af37',
     marginBottom: '20px',
+    boxSizing: 'border-box',
   },
   button: {
     padding: '10px 20px',
