@@ -10,12 +10,16 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@rainbow-me/rainbowkit": "^2.2.4",
     "@twa-dev/sdk": "^8.0.2",
+    "@wagmi/core": "^2.16.7",
     "node-fetch": "^2.7.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.5.0",
-    "telegraf": "^4.16.3"
+    "telegraf": "^4.16.3",
+    "viem": "^2.26.2",
+    "wagmi": "^2.14.16"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",
