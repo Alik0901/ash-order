@@ -1,80 +1,76 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function Profile() {
   const [name, setName] = useState('');
   const [fragments, setFragments] = useState([]);
   const [cursedUntil, setCursedUntil] = useState(null);
-  const [canEnterShadow, setCanEnterShadow] = useState(false);
+  const [isCursed, setIsCursed] = useState(false);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const savedName = localStorage.getItem('ash_order_name');
-    setName(savedName || 'Nameless Wanderer');
+    setName(savedName || 'Nameless');
 
-    // Заглушки
-    setFragments([
-      'Ash of Memory',
-      'Whisper of Fire',
-    ]);
+    const savedResult = JSON.parse(localStorage.getItem('ash_order_result'));
+    if (savedResult) {
+      setFragments(savedResult.fragments || []);
+      setCursedUntil(savedResult.cursedUntil || null);
 
-    const curseTime = localStorage.getItem('ash_curse_until');
-    if (curseTime && new Date(curseTime) > new Date()) {
-      setCursedUntil(new Date(curseTime));
+      const now = Date.now();
+      if (savedResult.cursedUntil && savedResult.cursedUntil > now) {
+        setIsCursed(true);
+      }
     }
-
-    setCanEnterShadow(false);
   }, []);
+
+  const handleReturn = () => {
+    if (!isCursed) {
+      navigate('/path');
+    }
+  };
 
   return (
     <div style={styles.container}>
       <div style={styles.overlay} />
-      <img src="/ledger_bg.webp" alt="Ash Ledger" style={styles.background} />
-
       <div style={styles.content}>
-        <h1 style={styles.title}>Ash Ledger</h1>
-        <p style={styles.subtitle}>"What you’ve lost shall guide you."</p>
+        <h2 style={styles.title}>Ash Ledger</h2>
+        <p style={styles.subtitle}>🜁 {name}</p>
 
         <div style={styles.section}>
-          <p><strong>Name:</strong> {name}</p>
-        </div>
-
-        <div style={styles.section}>
-          <h2 style={styles.heading}>Fragments</h2>
-          {fragments.length === 0 ? (
-            <p style={styles.empty}>No fragments have found you yet.</p>
-          ) : (
-            <ul style={styles.list}>
-              {fragments.map((f, i) => (
-                <li key={i} style={styles.fragment}>✦ {f}</li>
+          <h4 style={styles.label}>Fragments Collected:</h4>
+          {fragments.length > 0 ? (
+            <ul>
+              {fragments.map((frag, idx) => (
+                <li key={idx} style={styles.fragment}>🝓 {frag}</li>
               ))}
             </ul>
-          )}
-        </div>
-
-        <div style={styles.section}>
-          <h2 style={styles.heading}>Curse</h2>
-          {cursedUntil ? (
-            <p className="cursed">☠️ You are cursed until {cursedUntil.toLocaleString()}</p>
           ) : (
-            <p>You are free… for now.</p>
+            <p style={styles.text}>None yet</p>
           )}
         </div>
 
         <div style={styles.section}>
-          <h2 style={styles.heading}>Shadow Gate</h2>
-          {canEnterShadow ? (
-            <p className="gate">A whisper calls…</p>
+          <h4 style={styles.label}>Curse Status:</h4>
+          {isCursed ? (
+            <p style={styles.curse}>☠ Cursed until {new Date(cursedUntil).toLocaleString()}</p>
           ) : (
-            <p>The gate remains sealed by unseen forces.</p>
+            <p style={styles.text}>You are not cursed</p>
           )}
         </div>
 
-        <div style={styles.section}>
-          <h2 style={styles.heading}>World Progress</h2>
-          <div style={styles.progressBar}>
-            <div style={{ ...styles.progressFill, width: '5%' }} /> {/* Заглушка */}
-          </div>
-          <p style={styles.progressLabel}>The fire grows…</p>
-        </div>
+        <button
+          onClick={handleReturn}
+          style={{
+            ...styles.button,
+            opacity: isCursed ? 0.3 : 1,
+            cursor: isCursed ? 'not-allowed' : 'pointer',
+          }}
+          disabled={isCursed}
+        >
+          Return to Path
+        </button>
       </div>
     </div>
   );
@@ -84,80 +80,64 @@ const styles = {
   container: {
     position: 'relative',
     height: '100vh',
+    backgroundImage: 'url("/ledger_bg.webp")',
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
     overflow: 'hidden',
-    fontFamily: 'serif',
-    color: '#d4af37',
   },
   overlay: {
     position: 'absolute',
     inset: 0,
-    backgroundColor: 'rgba(0,0,0,0.65)',
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
     zIndex: 1,
-  },
-  background: {
-    position: 'absolute',
-    inset: 0,
-    width: '100%',
-    height: '100%',
-    objectFit: 'cover',
-    opacity: 0.35,
-    zIndex: 0,
   },
   content: {
     position: 'relative',
     zIndex: 2,
-    padding: '40px 20px',
-    maxWidth: '600px',
-    margin: '0 auto',
+    color: '#d4af37',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    fontFamily: 'serif',
     textAlign: 'center',
+    height: '100%',
+    padding: '40px 20px',
+    boxSizing: 'border-box',
   },
   title: {
-    fontSize: '36px',
-    letterSpacing: '2px',
-    marginBottom: '10px',
+    fontSize: '26px',
+    marginBottom: 8,
   },
   subtitle: {
-    fontStyle: 'italic',
-    marginBottom: '30px',
-    opacity: 0.7,
+    fontSize: '16px',
+    opacity: 0.8,
+    marginBottom: 30,
   },
   section: {
-    marginBottom: '25px',
+    marginBottom: 30,
   },
-  heading: {
-    fontSize: '20px',
-    marginBottom: '10px',
-    borderBottom: '1px solid #d4af37',
-    paddingBottom: '4px',
-  },
-  list: {
-    listStyle: 'none',
-    padding: 0,
+  label: {
+    fontSize: '18px',
+    marginBottom: 8,
   },
   fragment: {
-    padding: '5px 0',
+    fontSize: '15px',
+    marginBottom: 4,
+  },
+  text: {
+    fontSize: '15px',
+    opacity: 0.7,
+  },
+  curse: {
+    fontSize: '15px',
+    color: 'orangered',
+  },
+  button: {
+    padding: '10px 24px',
+    background: 'transparent',
+    color: '#d4af37',
+    border: '1px solid #d4af37',
     fontSize: '16px',
-    letterSpacing: '1px',
-  },
-  empty: {
-    fontStyle: 'italic',
-    opacity: 0.6,
-  },
-  progressBar: {
-    width: '100%',
-    height: '10px',
-    background: '#555',
-    borderRadius: '5px',
-    overflow: 'hidden',
-    margin: '10px 0',
-  },
-  progressFill: {
-    height: '100%',
-    background: '#d4af37',
-    transition: 'width 1s ease',
-  },
-  progressLabel: {
-    fontSize: '14px',
-    opacity: 0.6,
+    transition: 'opacity 0.3s ease',
   },
 };
