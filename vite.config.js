@@ -5,6 +5,11 @@ import react from '@vitejs/plugin-react';
 export default defineConfig({
   plugins: [react()],
   optimizeDeps: {
-    include: ['@tonconnect/sdk'],
+    include: ['@tonconnect/sdk'],  // Явно указываем, чтобы Vite правильно обработал
+  },
+  build: {
+    rollupOptions: {
+      external: ['@tonconnect/sdk'], // Убираем ошибку при сборке на Vercel
+    },
   },
 });
