@@ -1,0 +1,10 @@
+{
+    "manifest_version": "1",
+    "name": "Order of Ash",
+    "description": "A mystical TON-based Telegram ritual.",
+    "url": "https://your-domain.com",
+    "icons": ["https://your-domain.com/icon.png"],
+    "bridge_url": "https://bridge.tonapi.io/bridge",
+    "terms_of_use_url": "https://your-domain.com/terms"
+  }
+  

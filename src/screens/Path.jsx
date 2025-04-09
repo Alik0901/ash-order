@@ -1,28 +1,23 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAccount, useConnect, useDisconnect } from 'wagmi';
-import { injected } from 'wagmi/connectors';
+import { tonConnect } from '../lib/tonConnect';
 
 export default function Path() {
-  const [name, setName] = useState('');
-  const [error, setError] = useState('');
+  const [address, setAddress] = useState('');
   const navigate = useNavigate();
-
-  const { address, isConnected } = useAccount();
-
-  const { connect } = useConnect({
-    connector: injected(),
-    onError(error) {
-      console.error('Connection error:', error);
-      setError('❌ Failed to connect wallet. Make sure MetaMask is installed.');
-    },
-  });
-
-  const { disconnect } = useDisconnect();
 
   useEffect(() => {
     const saved = localStorage.getItem('ash_order_name');
-    setName(saved || 'Nameless');
+    if (!saved) navigate('/init');
+
+    tonConnect.restoreConnection().then(() => {
+      const acc = tonConnect.account;
+      if (acc?.address) {
+        setAddress(acc.address);
+      } else {
+        tonConnect.connect();
+      }
+    });
   }, []);
 
   return (
@@ -30,22 +25,11 @@ export default function Path() {
       <div style={styles.overlay} />
       <div style={styles.content}>
         <h2 style={styles.title}>The Path Begins</h2>
-        <p style={styles.subtitle}>{name}, you have taken the first step.</p>
+        <p style={styles.subtitle}>
+          {address ? `🜂 ${address}` : 'Connecting to your TON wallet...'}
+        </p>
 
-        <div style={styles.wallet}>
-          {isConnected ? (
-            <>
-              <p style={styles.address}>🜂 {address.slice(0, 6)}...{address.slice(-4)}</p>
-              <button style={styles.disconnect} onClick={disconnect}>Disconnect</button>
-            </>
-          ) : (
-            <button style={styles.button} onClick={() => connect()}>Connect Wallet</button>
-          )}
-        </div>
-
-        {error && <p style={styles.error}>{error}</p>}
-
-        {isConnected && (
+        {address && (
           <button style={styles.burn} onClick={() => navigate('/burn')}>
             Burn Yourself
           </button>
@@ -96,30 +80,6 @@ const styles = {
     opacity: 0.85,
     marginBottom: 20,
   },
-  wallet: {
-    marginBottom: 20,
-  },
-  address: {
-    fontSize: '15px',
-    marginBottom: 10,
-  },
-  button: {
-    padding: '10px 24px',
-    background: 'transparent',
-    color: '#d4af37',
-    border: '1px solid #d4af37',
-    cursor: 'pointer',
-    fontSize: '16px',
-    marginBottom: 10,
-  },
-  disconnect: {
-    padding: '8px 20px',
-    background: 'transparent',
-    border: '1px solid #d4af37',
-    color: '#d4af37',
-    fontSize: '14px',
-    cursor: 'pointer',
-  },
   burn: {
     padding: '10px 24px',
     background: '#d4af37',
@@ -128,10 +88,5 @@ const styles = {
     fontSize: '16px',
     cursor: 'pointer',
     marginTop: '10px',
-  },
-  error: {
-    color: 'orangered',
-    fontSize: '14px',
-    marginTop: 10,
   },
 };
