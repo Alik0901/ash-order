@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAccount, useConnect, useDisconnect } from 'wagmi';
-import { InjectedConnector } from '@wagmi/connectors';
+import { injected } from 'wagmi/connectors';
 
 export default function Path() {
   const [name, setName] = useState('');
@@ -11,7 +11,7 @@ export default function Path() {
   const { address, isConnected } = useAccount();
 
   const { connect } = useConnect({
-    connector: new InjectedConnector(),
+    connector: injected(),
     onError(error) {
       console.error('Connection error:', error);
       setError('❌ Failed to connect wallet. Make sure MetaMask is installed.');
