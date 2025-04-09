@@ -48,10 +48,13 @@ const styles = {
   container: {
     position: 'relative',
     height: '100vh',
+    width: '100%',
     backgroundImage: 'url("/bg-path.webp")',
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     overflow: 'hidden',
+    fontFamily: 'serif',
+    boxSizing: 'border-box',
   },
   overlay: {
     position: 'absolute',
@@ -62,15 +65,16 @@ const styles = {
   content: {
     position: 'relative',
     zIndex: 2,
+    height: '100%',
+    width: '100%',
     color: '#d4af37',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    fontFamily: 'serif',
     textAlign: 'center',
-    height: '100%',
     padding: '0 20px',
+    boxSizing: 'border-box',
   },
   title: {
     fontSize: '26px',
