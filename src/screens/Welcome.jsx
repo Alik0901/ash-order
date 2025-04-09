@@ -14,11 +14,7 @@ export default function Welcome() {
     setShowScroll(true);
     const audio = new Audio('/sounds/parchment-scroll.mp3');
     audio.play();
-
-    // запускаем анимацию через малую задержку
-    setTimeout(() => {
-      setAnimateScroll(true);
-    }, 10);
+    setTimeout(() => setAnimateScroll(true), 10);
   };
 
   return (
@@ -39,7 +35,7 @@ export default function Welcome() {
 
       {showScroll && (
         <div style={styles.scrollOverlay}>
-          <div className={`scroll-box ${animateScroll ? 'show' : ''}`}>
+          <div className={`scroll-box ${animateScroll ? 'show' : ''}`} style={styles.scroll}>
             <h2 style={styles.scrollTitle}>The Scroll of Ash</h2>
             <p style={styles.scrollText}>
               This is not a game of gain. It is a ritual of loss. <br /><br />
@@ -68,11 +64,13 @@ const styles = {
   container: {
     position: 'relative',
     height: '100vh',
+    width: '100%',
     backgroundImage: 'url("/bg-welcome.webp")',
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     overflow: 'hidden',
     fontFamily: 'serif',
+    boxSizing: 'border-box',
   },
   overlay: {
     position: 'absolute',
@@ -83,6 +81,7 @@ const styles = {
   content: {
     position: 'relative',
     zIndex: 2,
+    width: '100%',
     height: '100%',
     color: '#d4af37',
     display: 'flex',
@@ -91,6 +90,7 @@ const styles = {
     alignItems: 'center',
     textAlign: 'center',
     padding: '0 20px',
+    boxSizing: 'border-box',
   },
   title: {
     fontSize: '32px',
@@ -109,7 +109,6 @@ const styles = {
     border: '1px solid #d4af37',
     cursor: 'pointer',
     fontSize: '16px',
-    transition: 'box-shadow 0.3s ease',
     boxShadow: '0 0 6px rgba(212, 175, 55, 0.3)',
   },
   reveal: {
@@ -130,6 +129,18 @@ const styles = {
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
+    boxSizing: 'border-box',
+  },
+  scroll: {
+    background: '#1a1a1a',
+    border: '1px solid #d4af37',
+    padding: '30px',
+    maxWidth: '600px',
+    color: '#d4af37',
+    textAlign: 'left',
+    boxShadow: '0 0 15px rgba(212, 175, 55, 0.3)',
+    borderRadius: '8px',
+    boxSizing: 'border-box',
   },
   scrollTitle: {
     fontSize: '20px',
