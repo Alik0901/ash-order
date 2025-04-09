@@ -6,8 +6,7 @@ import './index.css';
 import './App.css';
 import WebApp from '@twa-dev/sdk';
 
-import { WagmiProvider } from 'wagmi';
-import { http, createConfig } from 'wagmi';
+import { WagmiConfig, createConfig, http } from 'wagmi';
 import { scrollSepolia } from 'wagmi/chains';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
@@ -20,18 +19,18 @@ const config = createConfig({
 });
 
 WebApp.ready();
-WebApp.expand(); // << ВАЖНО: Расширяет WebView на всю ширину
+WebApp.expand();
 
 const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <WagmiProvider config={config}>
+    <WagmiConfig config={config}>
       <QueryClientProvider client={queryClient}>
         <MemoryRouter>
           <App />
         </MemoryRouter>
       </QueryClientProvider>
-    </WagmiProvider>
+    </WagmiConfig>
   </React.StrictMode>
 );
