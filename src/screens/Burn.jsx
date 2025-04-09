@@ -1,21 +1,62 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { tonConnect } from '../lib/tonConnect';
 
 export default function Burn() {
   const [name, setName] = useState('');
   const [burning, setBurning] = useState(false);
+  const [result, setResult] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const saved = localStorage.getItem('ash_order_name');
-    setName(saved || 'Nameless');
-  }, []);
+    const savedName = localStorage.getItem('ash_order_name');
+    setName(savedName || 'Nameless');
+
+    const account = tonConnect.account;
+    if (!account?.address) {
+      navigate('/path');
+    }
+  }, [navigate]);
 
   const handleBurn = () => {
     setBurning(true);
+
     setTimeout(() => {
-      navigate('/profile');
+      const outcomes = ['fragment', 'curse', 'nothing'];
+      const outcome = outcomes[Math.floor(Math.random() * outcomes.length)];
+
+      const now = Date.now();
+      const walletAddress = tonConnect.account?.address;
+      const raw = localStorage.getItem(`ash_data_${walletAddress}`);
+      const saved = raw ? JSON.parse(raw) : { fragments: [], cursedUntil: null };
+
+      const updated = { ...saved };
+
+      if (outcome === 'fragment') {
+        const newFragment = `Fragment-${Math.floor(Math.random() * 1000)}`;
+        updated.fragments.push(newFragment);
+      } else if (outcome === 'curse') {
+        updated.cursedUntil = now + 24 * 60 * 60 * 1000;
+      }
+
+      localStorage.setItem(`ash_data_${walletAddress}`, JSON.stringify(updated));
+      setResult(outcome);
+
+      setTimeout(() => navigate('/profile'), 3000);
     }, 3000);
+  };
+
+  const renderResult = () => {
+    switch (result) {
+      case 'fragment':
+        return <p style={styles.result}>🜁 A fragment emerges from the ash</p>;
+      case 'curse':
+        return <p style={styles.result}>☠ You are cursed for 24 hours</p>;
+      case 'nothing':
+        return <p style={styles.result}>The fire takes... nothing</p>;
+      default:
+        return <p style={styles.burning}>🔥 The fire consumes you...</p>;
+    }
   };
 
   return (
@@ -30,7 +71,7 @@ export default function Burn() {
             Offer Yourself
           </button>
         ) : (
-          <p style={styles.burning}>🔥 The fire consumes you...</p>
+          renderResult()
         )}
       </div>
     </div>
@@ -84,5 +125,10 @@ const styles = {
   burning: {
     fontSize: '18px',
     color: 'orangered',
+  },
+  result: {
+    fontSize: '18px',
+    color: '#d4af37',
+    marginTop: 20,
   },
 };
