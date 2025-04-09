@@ -3,28 +3,29 @@ import { useNavigate } from 'react-router-dom';
 import { tonConnect } from '../lib/tonConnect';
 
 export default function Path() {
-  const [address, setAddress] = useState('');
+  const [name, setName] = useState('');
+  const [connected, setConnected] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
-    async function connectTON() {
+    const saved = localStorage.getItem('ash_order_name');
+    setName(saved || 'Nameless');
+
+    async function connectWallet() {
       try {
-        const connectedWallet = tonConnect.wallet;
-        if (!connectedWallet) {
-          await tonConnect.connect();  // Запрашиваем подключение кошелька
+        await tonConnect.restoreConnection(); // Восстановление, если уже подключён
+        const connectedWallet = await tonConnect.connect();
+        if (connectedWallet) {
+          setConnected(true);
         }
-        const addr = tonConnect.account?.address;
-        if (addr) {
-          setAddress(addr);  // Устанавливаем адрес в стейт
-        }
-      } catch (err) {
-        console.error('TON connection error:', err);
-        setError('Failed to connect to TON wallet.');
+      } catch (e) {
+        console.error('TON connection error:', e);
+        setError('❌ Failed to connect to TON wallet.');
       }
     }
 
-    connectTON();
+    connectWallet();
   }, []);
 
   return (
@@ -32,12 +33,14 @@ export default function Path() {
       <div style={styles.overlay} />
       <div style={styles.content}>
         <h2 style={styles.title}>The Path Begins</h2>
-        <p style={styles.subtitle}>
-          {address ? `🜂 ${address}` : 'Connecting to your TON wallet...'}
-        </p>
+        <p style={styles.subtitle}>{name}, you have taken the first step.</p>
 
-        {address && (
-          <button style={styles.burn} onClick={() => navigate('/burn')}>
+        {!connected && (
+          <p style={styles.subconnecting}>Connecting to your TON wallet...</p>
+        )}
+
+        {connected && (
+          <button style={styles.button} onClick={() => navigate('/burn')}>
             Burn Yourself
           </button>
         )}
@@ -58,7 +61,6 @@ const styles = {
     backgroundPosition: 'center',
     overflow: 'hidden',
     fontFamily: 'serif',
-    boxSizing: 'border-box',
   },
   overlay: {
     position: 'absolute',
@@ -87,20 +89,25 @@ const styles = {
   subtitle: {
     fontSize: '16px',
     opacity: 0.85,
-    marginBottom: 20,
+    marginBottom: 10,
   },
-  burn: {
+  subconnecting: {
+    fontSize: '16px',
+    marginBottom: 10,
+    opacity: 0.75,
+  },
+  button: {
     padding: '10px 24px',
     background: '#d4af37',
     color: '#000',
     border: 'none',
     fontSize: '16px',
     cursor: 'pointer',
-    marginTop: '10px',
+    marginTop: '20px',
   },
   error: {
     color: 'orangered',
+    marginTop: 12,
     fontSize: '14px',
-    marginTop: 10,
   },
 };
