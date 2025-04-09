@@ -7,5 +7,6 @@ WebApp.ready();
 
 export const tonConnect = new TonConnect({
   manifestUrl: 'https://ash-order.vercel.app/tonconnect-manifest.json',
-  walletsListSource: 'telegram', // Обязательно для работы в Telegram Mini App
+  walletsListSource: 'telegram',
 });
+
