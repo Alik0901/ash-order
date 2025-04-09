@@ -1,10 +1,18 @@
 {
-    "manifest_version": "1",
-    "name": "Order of Ash",
-    "description": "A mystical TON-based Telegram ritual.",
-    "url": "https://your-domain.com",
-    "icons": ["https://your-domain.com/icon.png"],
-    "bridge_url": "https://bridge.tonapi.io/bridge",
-    "terms_of_use_url": "https://your-domain.com/terms"
-  }
-  
+  "name": "Ash Order",
+  "short_name": "AshOrder",
+  "description": "Connect your TON wallet and interact with the Ash Order game.",
+  "icons": [
+    {
+      "src": "https://ash-order.vercel.app/icon.webp",  // Убедись, что у тебя есть иконка для приложения, если нет, добавь её
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#000000",  // Черный фон для таинственной атмосферы
+  "theme_color": "#d4af37",       // Золотой цвет для темы приложения
+  "display": "standalone",        // Открытие приложения в отдельном окне
+  "scope": "/",
+  "manifest_version": 1
+}
