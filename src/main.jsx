@@ -4,6 +4,7 @@ import { MemoryRouter } from 'react-router-dom';
 import App from './App.jsx';
 import './index.css';
 import './App.css';
+import WebApp from '@twa-dev/sdk';
 
 import { WagmiProvider } from 'wagmi';
 import { http, createConfig } from 'wagmi';
@@ -17,6 +18,9 @@ const config = createConfig({
   },
   ssr: false,
 });
+
+WebApp.ready();
+WebApp.expand(); // << ВАЖНО: Расширяет WebView на всю ширину
 
 const queryClient = new QueryClient();
 
