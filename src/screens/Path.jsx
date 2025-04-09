@@ -1,14 +1,23 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAccount, useConnect, useDisconnect } from 'wagmi';
-import { injected } from 'wagmi/connectors';
+import { InjectedConnector } from 'wagmi/connectors/injected';
 
 export default function Path() {
   const [name, setName] = useState('');
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   const { address, isConnected } = useAccount();
-  const { connect } = useConnect({ connector: injected() });
+
+  const { connect } = useConnect({
+    connector: new InjectedConnector(),
+    onError(error) {
+      console.error('Connection error:', error);
+      setError('❌ Failed to connect wallet. Make sure MetaMask is installed.');
+    },
+  });
+
   const { disconnect } = useDisconnect();
 
   useEffect(() => {
@@ -26,7 +35,7 @@ export default function Path() {
         <div style={styles.wallet}>
           {isConnected ? (
             <>
-              <p className="connected">🜂 {address.slice(0, 6)}...{address.slice(-4)}</p>
+              <p style={styles.address}>🜂 {address.slice(0, 6)}...{address.slice(-4)}</p>
               <button style={styles.disconnect} onClick={disconnect}>Disconnect</button>
             </>
           ) : (
@@ -34,8 +43,10 @@ export default function Path() {
           )}
         </div>
 
+        {error && <p style={styles.error}>{error}</p>}
+
         {isConnected && (
-          <button style={styles.button} onClick={() => navigate('/burn')}>
+          <button style={styles.burn} onClick={() => navigate('/burn')}>
             Burn Yourself
           </button>
         )}
@@ -88,6 +99,10 @@ const styles = {
   wallet: {
     marginBottom: 20,
   },
+  address: {
+    fontSize: '15px',
+    marginBottom: 10,
+  },
   button: {
     padding: '10px 24px',
     background: 'transparent',
@@ -104,5 +119,19 @@ const styles = {
     color: '#d4af37',
     fontSize: '14px',
     cursor: 'pointer',
+  },
+  burn: {
+    padding: '10px 24px',
+    background: '#d4af37',
+    color: '#000',
+    border: 'none',
+    fontSize: '16px',
+    cursor: 'pointer',
+    marginTop: '10px',
+  },
+  error: {
+    color: 'orangered',
+    fontSize: '14px',
+    marginTop: 10,
   },
 };
