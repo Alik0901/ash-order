@@ -4,20 +4,27 @@ import { tonConnect } from '../lib/tonConnect';
 
 export default function Path() {
   const [address, setAddress] = useState('');
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
-    const saved = localStorage.getItem('ash_order_name');
-    if (!saved) navigate('/init');
-
-    tonConnect.restoreConnection().then(() => {
-      const acc = tonConnect.account;
-      if (acc?.address) {
-        setAddress(acc.address);
-      } else {
-        tonConnect.connect();
+    async function connectTON() {
+      try {
+        const connectedWallet = tonConnect.wallet;
+        if (!connectedWallet) {
+          await tonConnect.connect();  // Запрашиваем подключение кошелька
+        }
+        const addr = tonConnect.account?.address;
+        if (addr) {
+          setAddress(addr);  // Устанавливаем адрес в стейт
+        }
+      } catch (err) {
+        console.error('TON connection error:', err);
+        setError('Failed to connect to TON wallet.');
       }
-    });
+    }
+
+    connectTON();
   }, []);
 
   return (
@@ -34,6 +41,8 @@ export default function Path() {
             Burn Yourself
           </button>
         )}
+
+        {error && <p style={styles.error}>{error}</p>}
       </div>
     </div>
   );
@@ -88,5 +97,10 @@ const styles = {
     fontSize: '16px',
     cursor: 'pointer',
     marginTop: '10px',
+  },
+  error: {
+    color: 'orangered',
+    fontSize: '14px',
+    marginTop: 10,
   },
 };
