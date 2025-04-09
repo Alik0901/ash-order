@@ -1,9 +1,15 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAccount, useConnect, useDisconnect } from 'wagmi';
+import { injected } from 'wagmi/connectors';
 
 export default function Path() {
   const [name, setName] = useState('');
   const navigate = useNavigate();
+
+  const { address, isConnected } = useAccount();
+  const { connect } = useConnect({ connector: injected() });
+  const { disconnect } = useDisconnect();
 
   useEffect(() => {
     const saved = localStorage.getItem('ash_order_name');
@@ -16,9 +22,23 @@ export default function Path() {
       <div style={styles.content}>
         <h2 style={styles.title}>The Path Begins</h2>
         <p style={styles.subtitle}>{name}, you have taken the first step.</p>
-        <button style={styles.button} onClick={() => navigate('/burn')}>
-          Burn Yourself
-        </button>
+
+        <div style={styles.wallet}>
+          {isConnected ? (
+            <>
+              <p className="connected">🜂 {address.slice(0, 6)}...{address.slice(-4)}</p>
+              <button style={styles.disconnect} onClick={disconnect}>Disconnect</button>
+            </>
+          ) : (
+            <button style={styles.button} onClick={() => connect()}>Connect Wallet</button>
+          )}
+        </div>
+
+        {isConnected && (
+          <button style={styles.button} onClick={() => navigate('/burn')}>
+            Burn Yourself
+          </button>
+        )}
       </div>
     </div>
   );
@@ -59,7 +79,10 @@ const styles = {
   subtitle: {
     fontSize: '16px',
     opacity: 0.85,
-    marginBottom: 30,
+    marginBottom: 20,
+  },
+  wallet: {
+    marginBottom: 20,
   },
   button: {
     padding: '10px 24px',
@@ -68,5 +91,14 @@ const styles = {
     border: '1px solid #d4af37',
     cursor: 'pointer',
     fontSize: '16px',
+    marginBottom: 10,
+  },
+  disconnect: {
+    padding: '8px 20px',
+    background: 'transparent',
+    border: '1px solid #d4af37',
+    color: '#d4af37',
+    fontSize: '14px',
+    cursor: 'pointer',
   },
 };
