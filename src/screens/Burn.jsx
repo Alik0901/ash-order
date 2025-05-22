@@ -3,43 +3,49 @@ import { useNavigate } from 'react-router-dom';
 import { tonConnect } from '../lib/tonConnect';
 
 export default function Burn() {
-  const [name, setName] = useState('');
-  const [burning, setBurning] = useState(false);
   const [address, setAddress] = useState('');
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
-    const saved = localStorage.getItem('ash_order_name');
-    setName(saved || 'Nameless');
+    async function checkWallet() {
+      try {
+        await tonConnect.restoreConnection();
+        const connected = await tonConnect.connect();
 
-    const tonConnect = getTonConnectInstance();
-    if (tonConnect.account?.address) {
-      setAddress(tonConnect.account.address);
+        if (connected) {
+          setAddress(tonConnect.account?.address);
+        } else {
+          console.warn('[WARNING] Кошелек не подключен');
+          setError('❌ Ошибка подключения TON кошелька');
+        }
+      } catch (err) {
+        console.error('[ERROR] TON Connect Exception:', err);
+        setError('❌ Ошибка подключения TON кошелька');
+      }
     }
-  }, []);
 
-  const handleBurn = () => {
-    setBurning(true);
-    setTimeout(() => {
-      navigate('/profile');
-    }, 3000);
-  };
+    checkWallet();
+  }, []);
 
   return (
     <div style={styles.container}>
       <div style={styles.overlay} />
       <div style={styles.content}>
-        <h2 style={styles.title}>The Sacrifice</h2>
-        <p style={styles.subtitle}>{name}, are you ready to burn?</p>
-        {address && <p style={styles.addr}>🜂 {address}</p>}
+        <h2 style={styles.title}>🔥 Burn Phase</h2>
 
-        {!burning ? (
-          <button style={styles.button} onClick={handleBurn}>
-            Offer Yourself
-          </button>
+        {address ? (
+          <>
+            <p style={styles.addr}>🜂 {address}</p>
+            <button style={styles.button} onClick={() => navigate('/ash')}>
+              Confirm Sacrifice
+            </button>
+          </>
         ) : (
-          <p style={styles.burning}>🔥 The fire consumes you...</p>
+          <p style={styles.connecting}>Checking wallet...</p>
         )}
+
+        {error && <p style={styles.error}>{error}</p>}
       </div>
     </div>
   );
@@ -49,53 +55,58 @@ const styles = {
   container: {
     position: 'relative',
     height: '100vh',
+    width: '100%',
     backgroundImage: 'url("/bg-burn.webp")',
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     overflow: 'hidden',
+    fontFamily: 'serif',
   },
   overlay: {
     position: 'absolute',
     inset: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
     zIndex: 1,
   },
   content: {
     position: 'relative',
     zIndex: 2,
+    height: '100%',
+    width: '100%',
     color: '#d4af37',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    fontFamily: 'serif',
     textAlign: 'center',
-    height: '100%',
     padding: '0 20px',
+    boxSizing: 'border-box',
   },
   title: {
     fontSize: '26px',
     marginBottom: 10,
   },
-  subtitle: {
+  addr: {
+    fontSize: '15px',
+    marginBottom: 20,
+  },
+  connecting: {
     fontSize: '16px',
     marginBottom: 10,
-  },
-  addr: {
-    fontSize: '14px',
-    marginBottom: 30,
-    opacity: 0.9,
+    opacity: 0.75,
   },
   button: {
     padding: '10px 24px',
-    background: 'transparent',
-    color: '#d4af37',
-    border: '1px solid #d4af37',
-    cursor: 'pointer',
+    background: '#d4af37',
+    color: '#000',
+    border: 'none',
     fontSize: '16px',
+    cursor: 'pointer',
+    marginTop: '20px',
   },
-  burning: {
-    fontSize: '18px',
+  error: {
     color: 'orangered',
+    fontSize: '14px',
+    marginTop: 10,
   },
 };

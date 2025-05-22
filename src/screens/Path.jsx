@@ -15,17 +15,15 @@ export default function Path() {
     async function connectWallet() {
       try {
         console.log('[DEBUG] Инициализация TonConnect...');
-        const tonConnect = getTonConnectInstance();
         await tonConnect.restoreConnection();
 
         const connected = await tonConnect.connect();
-        console.log('[DEBUG] Ответ от connect:', connected);
+        console.log('[DEBUG] Результат подключения:', connected);
 
         if (connected) {
-          console.log('[SUCCESS] Кошелёк подключён:', tonConnect.account);
           setAddress(tonConnect.account?.address);
         } else {
-          console.warn('[WARNING] Кошелёк не подключился');
+          console.warn('[WARNING] Кошелек не подключен');
         }
       } catch (err) {
         console.error('[ERROR] TON Connect Exception:', err);
