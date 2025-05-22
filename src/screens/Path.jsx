@@ -15,19 +15,20 @@ export default function Path() {
     async function connectWallet() {
       try {
         const tonConnect = getTonConnectInstance();
-        console.log('[DEBUG] Инициализация TonConnect...');
-        await tonConnect.restoreConnection();
+        console.log('[DEBUG] tonConnect instance:', tonConnect);
 
         const connected = await tonConnect.connect();
-        console.log('[DEBUG] Ответ от connect:', connected);
+        console.log('[DEBUG] connect() result:', connected);
 
-        if (connected) {
-          setAddress(tonConnect.account?.address);
+        if (connected && tonConnect.account?.address) {
+          setAddress(tonConnect.account.address);
+          console.log('[SUCCESS] Address:', tonConnect.account.address);
         } else {
-          console.warn('[WARNING] Кошелёк не подключился');
+          console.warn('[WARNING] Wallet not connected');
+          setError('⚠️ Кошелёк не подключился');
         }
       } catch (err) {
-        console.error('[ERROR] TON Connect:', err);
+        console.error('[ERROR] TON Connect Exception:', err);
         setError('❌ Ошибка подключения TON кошелька');
       }
     }
@@ -40,9 +41,7 @@ export default function Path() {
       <div style={styles.overlay} />
       <div style={styles.content}>
         <h2 style={styles.title}>The Path Begins</h2>
-        <p style={styles.subtitle}>
-          {name}, you have taken the first step.
-        </p>
+        <p style={styles.subtitle}>{name}, you have taken the first step.</p>
 
         {address ? (
           <>
