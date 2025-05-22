@@ -6,7 +6,8 @@ export function getTonConnectInstance() {
   if (!instance) {
     instance = new TonConnect({
       manifestUrl: 'https://ash-order.vercel.app/tonconnect-manifest.json',
-      walletsListSource: 'telegram'
+      walletsListSource: 'telegram',
+      environment: 'telegram'
     });
   }
   return instance;
