@@ -7,5 +7,10 @@ export default defineConfig({
     commonjsOptions: {
       include: [/node_modules/],
     },
-  },
+    rollupOptions: {
+      output: {
+        preferConst: true // предотвращает использование нативной сборки Rollup
+      }
+    }
+  }
 });
