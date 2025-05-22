@@ -1,13 +1,15 @@
 import { TonConnect } from '@tonconnect/sdk';
+import WebApp from '@twa-dev/sdk';
 
-let instance = null;
+WebApp.ready();
+
+let instance;
 
 export function getTonConnectInstance() {
   if (!instance) {
     instance = new TonConnect({
       manifestUrl: 'https://ash-order.vercel.app/tonconnect-manifest.json',
-      walletsListSource: 'telegram',
-      environment: 'telegram'
+      walletsListSource: 'registry' // ← Обязательно ИЗМЕНИТЬ с 'telegram' на 'registry'
     });
   }
   return instance;
