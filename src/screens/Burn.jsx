@@ -1,62 +1,28 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { tonConnect } from '../lib/tonConnect';
+import { getTonConnectInstance } from '../lib/tonConnect';
 
 export default function Burn() {
   const [name, setName] = useState('');
   const [burning, setBurning] = useState(false);
-  const [result, setResult] = useState(null);
+  const [address, setAddress] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
-    const savedName = localStorage.getItem('ash_order_name');
-    setName(savedName || 'Nameless');
+    const saved = localStorage.getItem('ash_order_name');
+    setName(saved || 'Nameless');
 
-    const account = tonConnect.account;
-    if (!account?.address) {
-      navigate('/path');
+    const tonConnect = getTonConnectInstance();
+    if (tonConnect.account?.address) {
+      setAddress(tonConnect.account.address);
     }
-  }, [navigate]);
+  }, []);
 
   const handleBurn = () => {
     setBurning(true);
-
     setTimeout(() => {
-      const outcomes = ['fragment', 'curse', 'nothing'];
-      const outcome = outcomes[Math.floor(Math.random() * outcomes.length)];
-
-      const now = Date.now();
-      const walletAddress = tonConnect.account?.address;
-      const raw = localStorage.getItem(`ash_data_${walletAddress}`);
-      const saved = raw ? JSON.parse(raw) : { fragments: [], cursedUntil: null };
-
-      const updated = { ...saved };
-
-      if (outcome === 'fragment') {
-        const newFragment = `Fragment-${Math.floor(Math.random() * 1000)}`;
-        updated.fragments.push(newFragment);
-      } else if (outcome === 'curse') {
-        updated.cursedUntil = now + 24 * 60 * 60 * 1000;
-      }
-
-      localStorage.setItem(`ash_data_${walletAddress}`, JSON.stringify(updated));
-      setResult(outcome);
-
-      setTimeout(() => navigate('/profile'), 3000);
+      navigate('/profile');
     }, 3000);
-  };
-
-  const renderResult = () => {
-    switch (result) {
-      case 'fragment':
-        return <p style={styles.result}>🜁 A fragment emerges from the ash</p>;
-      case 'curse':
-        return <p style={styles.result}>☠ You are cursed for 24 hours</p>;
-      case 'nothing':
-        return <p style={styles.result}>The fire takes... nothing</p>;
-      default:
-        return <p style={styles.burning}>🔥 The fire consumes you...</p>;
-    }
   };
 
   return (
@@ -65,13 +31,14 @@ export default function Burn() {
       <div style={styles.content}>
         <h2 style={styles.title}>The Sacrifice</h2>
         <p style={styles.subtitle}>{name}, are you ready to burn?</p>
+        {address && <p style={styles.addr}>🜂 {address}</p>}
 
         {!burning ? (
           <button style={styles.button} onClick={handleBurn}>
             Offer Yourself
           </button>
         ) : (
-          renderResult()
+          <p style={styles.burning}>🔥 The fire consumes you...</p>
         )}
       </div>
     </div>
@@ -112,7 +79,12 @@ const styles = {
   },
   subtitle: {
     fontSize: '16px',
+    marginBottom: 10,
+  },
+  addr: {
+    fontSize: '14px',
     marginBottom: 30,
+    opacity: 0.9,
   },
   button: {
     padding: '10px 24px',
@@ -125,10 +97,5 @@ const styles = {
   burning: {
     fontSize: '18px',
     color: 'orangered',
-  },
-  result: {
-    fontSize: '18px',
-    color: '#d4af37',
-    marginTop: 20,
   },
 };
