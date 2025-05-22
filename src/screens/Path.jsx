@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { tonConnect } from '../lib/tonConnect';
+import { getTonConnectInstance } from '../lib/tonConnect';
 
 export default function Path() {
   const [name, setName] = useState('');
@@ -14,14 +14,14 @@ export default function Path() {
 
     async function connectWallet() {
       try {
-        console.log('[DEBUG] Запуск подключения...');
+        const tonConnect = getTonConnectInstance();
+        console.log('[DEBUG] Инициализация TonConnect...');
         await tonConnect.restoreConnection();
 
         const connected = await tonConnect.connect();
         console.log('[DEBUG] Ответ от connect:', connected);
 
         if (connected) {
-          console.log('[SUCCESS] Кошелёк подключён:', tonConnect.account);
           setAddress(tonConnect.account?.address);
         } else {
           console.warn('[WARNING] Кошелёк не подключился');

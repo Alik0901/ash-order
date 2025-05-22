@@ -1,10 +1,13 @@
-// src/lib/tonConnect.js
 import { TonConnect } from '@tonconnect/sdk';
-import WebApp from '@twa-dev/sdk';
 
-WebApp.ready();
+let instance = null;
 
-export const tonConnect = new TonConnect({
-  manifestUrl: 'https://ash-order.vercel.app/tonconnect-manifest.json',
-  walletsListSource: 'telegram'
-});
+export function getTonConnectInstance() {
+  if (!instance) {
+    instance = new TonConnect({
+      manifestUrl: 'https://ash-order.vercel.app/tonconnect-manifest.json',
+      walletsListSource: 'telegram'
+    });
+  }
+  return instance;
+}
