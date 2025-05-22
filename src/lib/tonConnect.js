@@ -2,11 +2,9 @@
 import { TonConnect } from '@tonconnect/sdk';
 import WebApp from '@twa-dev/sdk';
 
-// Telegram WebApp готов к использованию
 WebApp.ready();
 
 export const tonConnect = new TonConnect({
   manifestUrl: 'https://ash-order.vercel.app/tonconnect-manifest.json',
-  walletsListSource: 'telegram',
+  walletsListSource: 'telegram' // ВАЖНО: иначе SDK не определяет окружение
 });
-
