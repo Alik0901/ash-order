@@ -4,7 +4,7 @@ import { tonConnect } from '../lib/tonConnect';
 
 export default function Path() {
   const [name, setName] = useState('');
-  const [connected, setConnected] = useState(false);
+  const [address, setAddress] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
@@ -14,14 +14,21 @@ export default function Path() {
 
     async function connectWallet() {
       try {
-        await tonConnect.restoreConnection(); // Восстановление, если уже подключён
-        const connectedWallet = await tonConnect.connect();
-        if (connectedWallet) {
-          setConnected(true);
+        console.log('[DEBUG] Запуск подключения...');
+        await tonConnect.restoreConnection();
+
+        const connected = await tonConnect.connect();
+        console.log('[DEBUG] Ответ от connect:', connected);
+
+        if (connected) {
+          console.log('[SUCCESS] Кошелёк подключён:', tonConnect.account);
+          setAddress(tonConnect.account?.address);
+        } else {
+          console.warn('[WARNING] Кошелёк не подключился');
         }
-      } catch (e) {
-        console.error('TON connection error:', e);
-        setError('❌ Failed to connect to TON wallet.');
+      } catch (err) {
+        console.error('[ERROR] TON Connect:', err);
+        setError('❌ Ошибка подключения TON кошелька');
       }
     }
 
@@ -33,16 +40,19 @@ export default function Path() {
       <div style={styles.overlay} />
       <div style={styles.content}>
         <h2 style={styles.title}>The Path Begins</h2>
-        <p style={styles.subtitle}>{name}, you have taken the first step.</p>
+        <p style={styles.subtitle}>
+          {name}, you have taken the first step.
+        </p>
 
-        {!connected && (
+        {address ? (
+          <>
+            <p style={styles.addr}>🜂 {address}</p>
+            <button style={styles.button} onClick={() => navigate('/burn')}>
+              Burn Yourself
+            </button>
+          </>
+        ) : (
           <p style={styles.subconnecting}>Connecting to your TON wallet...</p>
-        )}
-
-        {connected && (
-          <button style={styles.button} onClick={() => navigate('/burn')}>
-            Burn Yourself
-          </button>
         )}
 
         {error && <p style={styles.error}>{error}</p>}
@@ -89,7 +99,11 @@ const styles = {
   subtitle: {
     fontSize: '16px',
     opacity: 0.85,
-    marginBottom: 10,
+    marginBottom: 20,
+  },
+  addr: {
+    fontSize: '15px',
+    marginBottom: 20,
   },
   subconnecting: {
     fontSize: '16px',
@@ -107,7 +121,7 @@ const styles = {
   },
   error: {
     color: 'orangered',
-    marginTop: 12,
     fontSize: '14px',
+    marginTop: 10,
   },
 };
