@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getTonConnectInstance } from '../lib/tonConnect';
+import { tonConnect } from '../lib/tonConnect';
 
 export default function Burn() {
   const [name, setName] = useState('');
