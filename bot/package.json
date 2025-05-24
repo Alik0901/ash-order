@@ -1,0 +1,13 @@
+{
+    "name": "ash-order-bot",
+    "version": "1.0.0",
+    "main": "bot.cjs",
+    "type": "commonjs",
+    "scripts": {
+        "start": "node bot.cjs"
+    },
+    "dependencies": {
+        "@tonconnect/ui": "^2.1.0",
+        "telegraf": "^4.16.3"
+    }
+}
